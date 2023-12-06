@@ -8,6 +8,7 @@ import io
 
 from PIL import Image
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 from facesdk import getMachineCode
 from facesdk import setActivation
 from facesdk import initSDK
@@ -39,9 +40,12 @@ print("activation: ", ret)
 ret = initSDK("data".encode('utf-8'))
 print("init: ", ret)
 
-app = Flask(__name__) 
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/compare_face', methods=['POST'])
+@cross_origin()
 def check_liveness():
     result = "None"
     similarity = -1
@@ -125,6 +129,7 @@ def check_liveness():
     return response
 
 @app.route('/compare_face_base64', methods=['POST'])
+@cross_origin()
 def check_liveness_base64():
     result = "None"
     similarity = -1
